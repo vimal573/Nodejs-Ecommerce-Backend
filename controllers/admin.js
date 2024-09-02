@@ -11,7 +11,6 @@ exports.getAddProducts = (req, res, next) => {
 };
 
 exports.postAddProducts = (req, res, next) => {
-  console.log(req.body);
   const { title, imageUrl, price, description } = req.body;
   const product = new Product(title, imageUrl, price, description);
   product.save();
@@ -21,6 +20,7 @@ exports.postAddProducts = (req, res, next) => {
 exports.getProducts = (req, res, next) => {
   Product.fetchAll(products => {
     res.render('admin/products', {
+      prods: products,
       pageTitle: 'Admin Products',
       path: '/admin/products',
     });
