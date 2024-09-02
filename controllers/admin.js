@@ -18,13 +18,9 @@ exports.postAddProducts = (req, res, next) => {
 
 exports.getProducts = (req, res, next) => {
   Product.fetchAll(products => {
-    res.render('shop/product-list', {
-      prods: products,
-      pageTitle: 'shop',
-      path: '/',
-      hasProducts: products.length > 0,
-      activeShop: true,
-      productCSS: true,
+    res.render('admin/products', {
+      pageTitle: 'Admin Products',
+      path: '/admin/products',
     });
   });
 };
