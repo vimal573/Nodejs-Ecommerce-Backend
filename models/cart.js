@@ -27,11 +27,12 @@ module.exports = class Cart {
         updatedProduct.qty = updatedProduct.qty + 1;
         cart.products = [...cart.products];
         cart.products[existingProductIndex] = updatedProduct;
+        cart.totalPrice = cart.totalPrice + +productPrice;
       } else {
         updatedProduct = { id: id, qty: 1 };
         cart.products = [...cart.products, updatedProduct];
+        cart.totalPrice = cart.totalPrice + +productPrice;
       }
-      cart.totalPrice = cart.totalPrice + +productPrice;
       fs.writeFile(p, JSON.stringify(cart), err => {
         console.log(err);
       });
@@ -50,7 +51,7 @@ module.exports = class Cart {
         prod => prod.id !== id
       );
       updatedCart.totalPrice =
-        updatedCart.totalPrice - productPrice * productQty;
+        updatedCart.totalPrice - +productPrice * productQty;
 
       fs.writeFile(p, JSON.stringify(updatedCart), err => {
         console.log(err);
