@@ -11,8 +11,6 @@ const app = express();
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
-db.execute('');
-
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
