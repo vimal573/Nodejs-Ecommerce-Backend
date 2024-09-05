@@ -5,7 +5,7 @@ const productionSchema = new mongoose.Schema({
     type: String,
     requied: true,
   },
-  pice: {
+  price: {
     type: Number,
     required: true,
   },
@@ -18,3 +18,5 @@ const productionSchema = new mongoose.Schema({
     required: true,
   },
 });
+
+module.exports = mongoose.model('Product', productionSchema);
