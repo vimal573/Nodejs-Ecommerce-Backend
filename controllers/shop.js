@@ -46,7 +46,7 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-  req.user
+  req.session.user
     .populate('cart.items.productId')
     .execPopulate()
     .then(user => {
@@ -74,7 +74,8 @@ exports.postCart = (req, res, next) => {
 
 exports.postCartDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
-  req.user
+
+  req.session.user
     .removeFromCart(prodId)
     .then(result => {
       res.redirect('/cart');
@@ -83,7 +84,7 @@ exports.postCartDeleteProduct = (req, res, next) => {
 };
 
 exports.postOrder = (req, res, next) => {
-  req.user
+  req.session.user
     .populate('cart.items.productId')
     .execPopulate()
     .then(user => {
