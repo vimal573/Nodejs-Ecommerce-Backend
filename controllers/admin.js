@@ -56,7 +56,7 @@ exports.postEditProduct = (req, res, next) => {
 
   Product.findById(prodId)
     .then(product => {
-      if (product.userId !== req.user.id) {
+      if (product.userId.toString() !== req.user.id.toString()) {
         res.redirect('/');
       }
       product.title = updatedTitle;
