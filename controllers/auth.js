@@ -55,32 +55,33 @@ exports.getSignup = (req, res, next) => {
 };
 
 exports.postLogin = (req, res, next) => {
-  const { email, password } = req.body;
+  const email = req.body.email;
+  const password = req.body.password;
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).render('auth/login', {
       path: '/login',
-      pageTitle: 'login',
+      pageTitle: 'Login',
       errorMessage: errors.array()[0].msg,
       oldInput: {
-        email,
-        password,
+        email: email,
+        password: password,
       },
       validationErrors: errors.array(),
     });
   }
 
-  User.findOne({ email })
+  User.findOne({ email: email })
     .then(user => {
       if (!user) {
         return res.status(422).render('auth/login', {
           path: '/login',
-          pageTitle: 'login',
-          errorMessage: 'Invalid email or password',
+          pageTitle: 'Login',
+          errorMessage: 'Invalid email or password.',
           oldInput: {
-            email,
-            password,
+            email: email,
+            password: password,
           },
           validationErrors: [],
         });
@@ -98,11 +99,11 @@ exports.postLogin = (req, res, next) => {
           }
           return res.status(422).render('auth/login', {
             path: '/login',
-            pageTitle: 'login',
-            errorMessage: 'Invalid email or password',
+            pageTitle: 'Login',
+            errorMessage: 'Invalid email or password.',
             oldInput: {
-              email,
-              password,
+              email: email,
+              password: password,
             },
             validationErrors: [],
           });
@@ -116,14 +117,21 @@ exports.postLogin = (req, res, next) => {
 };
 
 exports.postSignup = (req, res, next) => {
-  const { email, password, confirmPassword } = req.body;
+  const email = req.body.email;
+  const password = req.body.password;
+
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
+    console.log(errors.array());
     return res.status(422).render('auth/signup', {
       path: '/signup',
       pageTitle: 'Signup',
       errorMessage: errors.array()[0].msg,
-      oldInput: { email, password, confirmPassword },
+      oldInput: {
+        email: email,
+        password: password,
+        confirmPassword: req.body.confirmPassword,
+      },
       validationErrors: errors.array(),
     });
   }
@@ -132,7 +140,7 @@ exports.postSignup = (req, res, next) => {
     .hash(password, 12)
     .then(hashedPassword => {
       const user = new User({
-        email,
+        email: email,
         password: hashedPassword,
         cart: { items: [] },
       });
@@ -140,12 +148,12 @@ exports.postSignup = (req, res, next) => {
     })
     .then(result => {
       res.redirect('/login');
-      return transport.sendMail({
-        to: email,
-        from: 'shop@node-complete.com',
-        subject: 'Signup Succeeded!',
-        html: '<h1>You successfully signed up!</h1>',
-      });
+      // return transporter.sendMail({
+      //   to: email,
+      //   from: 'shop@node-complete.com',
+      //   subject: 'Signup succeeded!',
+      //   html: '<h1>You successfully signed up!</h1>'
+      // });
     })
     .catch(err => {
       console.log(err);
