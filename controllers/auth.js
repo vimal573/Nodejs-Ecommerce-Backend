@@ -4,6 +4,7 @@ const nodeMailer = require('nodemailer');
 const { validationResult } = require('express-validator');
 
 const User = require('../models/user');
+const { ValidationError } = require('sequelize');
 
 const transport = nodeMailer.createTransport({
   host: 'sandbox.smtp.mailtrap.io',
@@ -44,6 +45,7 @@ exports.getSignup = (req, res, next) => {
       password: '',
       confirmPassword: '',
     },
+    validationErrors: [],
   });
 };
 
@@ -96,6 +98,7 @@ exports.postSignup = (req, res, next) => {
       pageTitle: 'Signup',
       errorMessage: errors.array()[0].msg,
       oldInput: { email, password, confirmPassword },
+      validationErrors: errors.array(),
     });
   }
 
